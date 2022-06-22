@@ -1,0 +1,22 @@
+service: "service.py:svc"
+labels:
+  owner: bentoml-team
+  project: gallery
+include:
+- "*.py"
+exclude:
+- tests
+- "*.go"
+python:
+  packages:
+    - scikit-learn
+    - pandas
+  index_url: https://pypi.python.org/simple
+  trusted_host: test
+  wheels:
+    - lib/quickstart_bentoml-0.0.1-py3-none-any.whl
+conda:
+  dependencies:
+    - numpy
+    - pip:
+      - pandas
