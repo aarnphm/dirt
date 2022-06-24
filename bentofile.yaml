@@ -15,8 +15,12 @@ python:
   trusted_host: test
   wheels:
     - lib/quickstart_bentoml-0.0.1-py3-none-any.whl
-conda:
-  dependencies:
-    - numpy
-    - pip:
-      - pandas
+# conda:
+#   dependencies:
+#     - numpy
+#     - pip:
+#       - pandas
+docker:
+  distro: debian
+  # cuda_version: 11
+  dockerfile_template: ./Dockerfile.template

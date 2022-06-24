@@ -1,4 +1,4 @@
-{% extends "base_debian.j2" %}
+{% extends "miniconda_debian.j2" %}
 {# Make sure to change the correct python_version and conda version accordingly. #}
 {# example: "py38_4.10.3" #}
 {# refers to https://repo.anaconda.com/miniconda/ for miniconda3 base #}
