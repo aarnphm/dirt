@@ -1,3 +1,5 @@
 [submodule "ingress-nginx"]
 	path = ingress-nginx
 	url = git@github.com:kubernetes/ingress-nginx.git
+	ignore = dirty
+
