@@ -1,0 +1,38 @@
+{% extends bento_base_template %}
+{% block SETUP_BENTO_BASE_IMAGE %}
+
+ARG ARCH=amd64
+
+FROM golang:alpine as build-stage
+
+ARG ARCH
+
+WORKDIR /tmp
+
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk --update add bash build-base git
+
+SHELL [ "/bin/bash", "-exo", "pipefail", "-c" ]
+
+RUN git clone --depth 1 https://github.com/kubernetes/ingress-nginx.git
+
+WORKDIR /tmp/ingress-nginx
+
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    PKG=k8s.io/ingress-nginx \
+    ARCH=${ARCH} \
+    COMMIT_SHA=$(git rev-parse --short HEAD) \
+    REPO_INFO=$(git config --get remote.origin.url) \
+    TAG="0.0.0" \
+    ./build/build.sh
+
+WORKDIR /tmp/ingress-nginx/rootfs/bin/${ARCH}
+
+{{ super() }}
+
+ARG ARCH
+
+COPY --from=build-stage /tmp/ingress-nginx/rootfs/bin/${ARCH}/ /usr/local/bin
+
+{% endblock %}
+# vim: set ft=dockerfile.jinja ts=4 sw=4 tw=0 et :

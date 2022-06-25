@@ -11,16 +11,10 @@ python:
   packages:
     - scikit-learn
     - pandas
-  index_url: https://pypi.python.org/simple
-  trusted_host: test
-  wheels:
-    - lib/quickstart_bentoml-0.0.1-py3-none-any.whl
-# conda:
-#   dependencies:
-#     - numpy
-#     - pip:
-#       - pandas
+    - awscli
+  lock_packages: False
 docker:
   distro: debian
-  # cuda_version: 11
-  dockerfile_template: ./Dockerfile.template
+  system_packages:
+    - nginx
+  dockerfile_template: ./Dockerfile-aws.template
