@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+
+def main():
+    import tensorflow as tf
+    import numpy as np
+
+    zero_out = tf.load_op_library("./zero_out.so").zero_out
+    if not np.isclose(
+        zero_out([[1, 2], [3, 4]]).numpy(), np.array([[1, 0], [0, 0]], dtype=np.int32)
+    ).all():
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
