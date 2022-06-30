@@ -1,20 +1,16 @@
 {% extends bento_base_template %}
-{# change the value of tf_image to #}
-{# tensorflow/tensorflow:nightly-gpu #}
-{# if your op supports GPU kernel #}
-{% set tf_image = "tensorflow/tensorflow:nightly" %}
 {% block SETUP_BENTO_BASE_IMAGE %}
 
-FROM --platform=linux/amd64 {{ tf_image }} as build-stage
+
+{{ super() }}
 
 WORKDIR /tmp
 
-COPY ./src/tfops/zero_out.cc .
-
 SHELL [ "bash", "-exo", "pipefail", "-c" ]
 
-RUN python3 -c "import tensorflow as tf"
+COPY ./src/tfops/zero_out.cc .
 
+RUN pip3 install tensorflow
 RUN bash <<EOF
 set -ex
 
@@ -24,11 +20,9 @@ TF_LFLAGS=( $(python3 -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.g
 g++ --std=c++14 -shared /tmp/zero_out.cc -o zero_out.so -fPIC ${TF_CFLAGS[@]} ${TF_LFLAGS[@]} -I$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_include());') -D_GLIBCXX_USE_CXX11_ABI=0 -O2
 EOF
 
+# step that it fails
 RUN python3 -c "import tensorflow as tf; import numpy as np; zero_out_module=tf.load_op_library('./zero_out.so');print(np.isclose(zero_out_module.zero_out([[1, 2], [3, 4]]).numpy(), np.array([[1,0], [0,0]], dtype=np.int32)).all());"
 
-{{ super() }}
-
-COPY --from=build-stage /tmp/zero_out.so /usr/lib/zero_out.so
 
 {% endblock %}
 {% block SETUP_BENTO_COMPONENTS %}
