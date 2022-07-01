@@ -10,12 +10,10 @@ exclude:
 - "*.go"
 - "*.so"
 - ingress-nginx/
-- yolo
+- yolo/
 python:
   packages:
     - scikit-learn
     - pandas
     - awscli
   lock_packages: False
-docker:
-  dockerfile_template: ./Dockerfile-tf.template
