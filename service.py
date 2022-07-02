@@ -1,4 +1,3 @@
-"""service definition"""
 import logging
 
 import bentoml
