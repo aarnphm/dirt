@@ -2,4 +2,4 @@
 
 bento=$(grep "Service" ./service.py | cut -d \" -f2)
 
-bentoml build -f ./bentofile.yaml && bentoml containerize "$bento":latest --platform linux/arm64/v8 --progress plain "$@"
+bentoml build -f ./bentofile.yaml && bentoml containerize "$bento":latest --platform linux/amd64 --progress plain "$@"

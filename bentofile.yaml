@@ -6,14 +6,9 @@ include:
 - "*.py"
 - "tfops/zero_out.cc"
 exclude:
-- tests
 - "*.go"
 - "*.so"
-- ingress-nginx/
-- yolo/
 python:
   packages:
     - scikit-learn
-    - pandas
-    - awscli
   lock_packages: False

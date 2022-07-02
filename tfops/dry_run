@@ -2,8 +2,8 @@
 
 
 def main():
-    import tensorflow as tf
     import numpy as np
+    import tensorflow as tf
 
     zero_out = tf.load_op_library("/tmp/zero_out.so").zero_out
     print(
