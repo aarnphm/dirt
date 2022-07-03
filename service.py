@@ -1,10 +1,7 @@
-import logging
-
+from __future__ import annotations
 import bentoml
 import numpy as np
 from bentoml.io import NumpyNdarray
-
-logging.basicConfig(level=logging.WARN)
 
 iris_clf_runner = bentoml.sklearn.get("iris_clf:latest").to_runner()
 
