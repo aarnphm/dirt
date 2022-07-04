@@ -1,7 +1,8 @@
 import logging
-import bentoml
-import torch
+
 import numpy as np
+import torch
+import bentoml
 from bentoml.io import JSON
 
 runner = bentoml.pytorch.get("yolov5:latest").to_runner()

@@ -3,12 +3,13 @@
 Run a Flask REST API exposing a YOLOv5s model
 """
 
-import argparse
 import io
+import argparse
 
 import torch
-from flask import Flask, request
 from PIL import Image
+from flask import Flask
+from flask import request
 
 app = Flask(__name__)
 
@@ -42,5 +43,7 @@ if __name__ == "__main__":
     # Fix known issue urllib.error.HTTPError 403: rate limit exceeded https://github.com/ultralytics/yolov5/pull/7210
     torch.hub._validate_not_a_forked_repo = lambda a, b, c: True
 
-    model = torch.hub.load("ultralytics/yolov5", "yolov5s", force_reload=True)  # force_reload to recache
+    model = torch.hub.load(
+        "ultralytics/yolov5", "yolov5s", force_reload=True
+    )  # force_reload to recache
     app.run(host="0.0.0.0", port=opt.port)  # debug=True causes Restarting with stat
