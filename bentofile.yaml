@@ -12,3 +12,5 @@ python:
   packages:
     - scikit-learn
   lock_packages: False
+docker:
+  dockerfile_template: ./Dockerfile.template
