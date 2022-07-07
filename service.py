@@ -2,24 +2,23 @@ from __future__ import annotations
 
 import logging
 
+import typing as t
 import numpy as np
 import bentoml
-from bentoml.io import JSON
 from bentoml.io import Text
 from bentoml.io import NumpyNdarray
-from starlette.requests import Request
 from starlette.responses import PlainTextResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
-logging.basicConfig(level=logging.DEBUG)
+bentoml_logger = logging.getLogger("bentoml")
+bentoml_logger.setLevel(logging.DEBUG)
 
 iris_clf_runner = bentoml.sklearn.get("iris_clf:latest").to_runner()
-
 svc = bentoml.Service("iris_classifier", runners=[iris_clf_runner])
 
 
 @svc.api(input=NumpyNdarray(), output=NumpyNdarray())
-def classify(input_series: np.ndarray) -> np.ndarray:
+def classify(input_series: np.ndarray[t.Any]) -> np.ndarray[t.Any]:
     """classify a series of numpy array."""
     return iris_clf_runner.run(input_series)
 
@@ -32,3 +31,14 @@ class CustomReadyzMiddleware(BaseHTTPMiddleware):
 
 
 svc.add_asgi_middleware(CustomReadyzMiddleware)
+
+
+fast_runner = bentoml.fastai.get("iris_fai:latest").to_runner()
+fastsvc = bentoml.Service("fast_sentiment", runners=[fast_runner])
+
+
+@fastsvc.api(input=Text(), output=NumpyNdarray())
+def classify_text(text: str) -> str:
+    """classify a text."""
+    res = fast_runner.predict.run(text)
+    return np.asarray(res[-1])

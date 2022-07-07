@@ -11,6 +11,11 @@ exclude:
 python:
   packages:
     - scikit-learn
+    - fastai
   lock_packages: False
+# conda:
+#   dependencies:
+#     - pandas
 docker:
-  dockerfile_template: ./Dockerfile.template
+  cuda_version: default
+  dockerfile_template: ./Dockerfile-conda_cuda.template
