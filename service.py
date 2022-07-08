@@ -33,12 +33,12 @@ class CustomReadyzMiddleware(BaseHTTPMiddleware):
 svc.add_asgi_middleware(CustomReadyzMiddleware)
 
 
-fast_runner = bentoml.fastai.get("iris_fai:latest").to_runner()
-fastsvc = bentoml.Service("fast_sentiment", runners=[fast_runner])
+# fast_runner = bentoml.fastai.get("iris_fai:latest").to_runner()
+# fastsvc = bentoml.Service("fast_sentiment", runners=[fast_runner])
 
 
-@fastsvc.api(input=Text(), output=NumpyNdarray())
-def classify_text(text: str) -> str:
-    """classify a text."""
-    res = fast_runner.predict.run(text)
-    return np.asarray(res[-1])
+# @fastsvc.api(input=Text(), output=NumpyNdarray())
+# def classify_text(text: str) -> str:
+#     """classify a text."""
+#     res = fast_runner.predict.run(text)
+#     return np.asarray(res[-1])
