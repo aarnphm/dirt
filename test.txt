@@ -1,1 +1,0 @@
-put every pip args into install.sh
