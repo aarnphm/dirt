@@ -13,9 +13,3 @@ python:
     - scikit-learn
     - fastai
   lock_packages: False
-# conda:
-#   dependencies:
-#     - pandas
-docker:
-  cuda_version: default
-  # docker_template: ./Dockerfile-conda_cuda.template

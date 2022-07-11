@@ -1,10 +1,7 @@
 from __future__ import annotations
 
 import bentoml
-import logging
 from bentoml.io import NumpyNdarray, JSON
-
-bentoml_logger = logging.getLogger("bentoml")
 
 
 class spamdetectionrunnable(bentoml.Runnable):
