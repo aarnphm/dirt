@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -ex
+
+printf '%s %s' "$USER" "$HOME"

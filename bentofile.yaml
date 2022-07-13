@@ -11,5 +11,7 @@ exclude:
 python:
   packages:
     - scikit-learn
-    - fastai
   lock_packages: False
+# docker:
+#   distro: alpine
+

@@ -1,25 +1,28 @@
 from __future__ import annotations
 
 import bentoml
-from bentoml.io import NumpyNdarray, JSON
+from bentoml.io import JSON
+from bentoml.io import NumpyNdarray
+from numpy.typing import ArrayLike
 
 
-class spamdetectionrunnable(bentoml.Runnable):
-    SUPPORTED_RESOURCES = ()
-    SUPPORTS_CPU_MULTI_THREADING = False
+bento_model = bentoml.sklearn.get("iris_clf:latest")
+
+
+class SpamDetectionRunnable(bentoml.Runnable):
+    SUPPORTS_CPU_MULTI_THREADING = True
 
     def __init__(self):
-        # load the model back:
-        self.classifier = bentoml.sklearn.load_model("iris_clf:latest")
+        # load the model instance
+        self.classifier = bentoml.sklearn.load_model(bento_model)
 
     @bentoml.Runnable.method(batchable=False)
-    def is_spam(self, input_):
-        return self.classifier.predict(input_)
+    def is_spam(self, input_data: ArrayLike) -> ArrayLike:
+        return self.classifier.predict(input_data)
 
 
-spam_detection_runner = bentoml.Runner(
-    spamdetectionrunnable, models=[bentoml.models.get("iris_clf:latest")]
-)
+spam_detection_runner = bentoml.Runner(SpamDetectionRunnable, models=[bento_model])
+
 
 svc = bentoml.Service("spam_detector", runners=[spam_detection_runner])
 
