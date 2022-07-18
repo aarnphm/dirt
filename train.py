@@ -1,21 +1,24 @@
 import logging
 
 import bentoml
-from sklearn import svm
-from sklearn import datasets
 
 logging.basicConfig(level=logging.WARN)
 
+from transformers import pipeline
+
+TINY_TEXT_MODEL = "hf-internal-testing/tiny-random-distilbert"
+
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+tokenizer = AutoTokenizer.from_pretrained(TINY_TEXT_MODEL)
+
+model = AutoModelForSequenceClassification.from_pretrained(TINY_TEXT_MODEL)
+
+
 if __name__ == "__main__":
 
-    # Load training data
-    iris = datasets.load_iris()
-    X, y = iris.data, iris.target
-
-    # Model Training
-    clf = svm.SVC()
-    clf.fit(X, y)
-
-    # Save model to BentoML local model store
-    saved_model = bentoml.sklearn.save_model("iris_clf", clf)
-    print(f"Model saved: {saved_model}")
+    transformers_model = bentoml.transformers.save_model(
+        "tiny_random_bert",
+        pipeline(task="text-classification", model=model, tokenizer=tokenizer),
+        signatures={"__call__": {"batchable": True}},
+    )

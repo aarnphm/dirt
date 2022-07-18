@@ -1,40 +1,20 @@
 from __future__ import annotations
 
 import typing as t
-import numpy as np
 import bentoml
-from bentoml.io import NumpyNdarray
+from bentoml.io import Text, JSON
+import inspect
 
 
-iris_clf_runner = bentoml.sklearn.get("iris_clf:latest").to_runner()
-svc = bentoml.Service("iris_classifier", runners=[iris_clf_runner])
+runner = bentoml.transformers.get("tiny_random_bert").to_runner()
+svc = bentoml.Service("batch_pipeline", runners=[runner])
 
 
-@svc.api(input=NumpyNdarray(), output=NumpyNdarray())
-def classify(input_series: np.ndarray[t.Any]) -> np.ndarray[t.Any]:
+@svc.api(input=Text(), output=JSON())
+async def classify(input_series: list[str]) -> dict[str, t.Any]:
     """classify a series of numpy array."""
-    return iris_clf_runner.run(input_series)
-
-
-# from starlette.responses import PlainTextResponse
-# from starlette.middleware.base import BaseHTTPMiddleware
-
-# class CustomReadyzMiddleware(BaseHTTPMiddleware):
-#     async def dispatch(self, request, call_next):
-#         if request.url == "http://127.0.0.1:3000/readyz":
-#             return PlainTextResponse("Not ready", status_code=503)
-#         return await call_next(request)
-
-
-# svc.add_asgi_middleware(CustomReadyzMiddleware)
-
-
-# fast_runner = bentoml.fastai.get("iris_fai:latest").to_runner()
-# fastsvc = bentoml.Service("fast_sentiment", runners=[fast_runner])
-
-
-# @fastsvc.api(input=Text(), output=NumpyNdarray())
-# def classify_text(text: str) -> str:
-#     """classify a text."""
-#     res = fast_runner.predict.run(text)
-#     return np.asarray(res[-1])
+    res = inspect.get_annotations(
+        runner.runnable_class.bentoml_runnable_methods__["__call__"].func
+    )
+    print(res)
+    return await runner.async_run(*input_series)
