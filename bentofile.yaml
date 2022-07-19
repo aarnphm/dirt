@@ -12,6 +12,6 @@ python:
   packages:
     - scikit-learn
   lock_packages: False
-# docker:
-#   distro: alpine
+docker:
+  distro: alpine
 
