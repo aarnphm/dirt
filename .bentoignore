@@ -6,3 +6,5 @@ build
 tests/
 ingress-nginx/
 yolo/
+scratch/
+ticket-custom-runner/
